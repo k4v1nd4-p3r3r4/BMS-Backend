@@ -26,48 +26,49 @@ class MaterialsController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'material_id' => ['required', 'regex:/^M\d{3}$/'],
-        'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
-        'initial_qty' => 'required|numeric',
-        'unit' => 'required'
-    ], [
-        'material_id.regex' => 'Material ID should start with M followed by three digits (e.g., M001)',
-        'material_name.regex' => 'Material name must contain at least one letter',
-        'initial_qty.numeric' => 'Initial quantity must be a number'
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => 422,
-            'message' => $validator->messages()
-        ], 422);
-    } else {
-        // Create a new instance of Materials model
-       $material =Materials::create([
-        'material_id'=> $request->material_id,
-        'material_name'=> $request->material_name,
-        'initial_qty'=> $request->initial_qty,
-        'unit'=> $request->unit
-       ]);
-
-        if ($material) {
-
-            $this->updateInitialQuantity($request->material_id, $request->initial_qty);
+    {
+        $validator = Validator::make($request->all(), [
+            'material_id' => ['required', 'regex:/^M\d{3}$/', 'unique:materials,material_id'],
+            'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
+            'initial_qty' => 'required|numeric',
+            'unit' => 'required'
+        ], [
+            'material_id.regex' => 'Material ID should start with M followed by three digits (e.g., M001)',
+            'material_id.unique' => 'Material ID already exists',
+            'material_name.regex' => 'Material name must contain at least one letter',
+            'initial_qty.numeric' => 'Initial quantity must be a number'
+        ]);
+    
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 200,
-                'message' => 'Material added successfully',
-                'material' => $material
-            ], 200);
+                'status' => 422,
+                'message' => $validator->messages()
+            ], 422);
         } else {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Failed! Something went wrong!'
-            ], 500);
+            // Create a new instance of Materials model
+            $material = Materials::create([
+                'material_id'=> $request->material_id,
+                'material_name'=> $request->material_name,
+                'initial_qty'=> $request->initial_qty,
+                'unit'=> $request->unit
+            ]);
+    
+            if ($material) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Material added successfully',
+                    'material' => $material
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Failed! Something went wrong!'
+                ], 500);
+            }
         }
     }
-}
+    
+    
 
     
 
