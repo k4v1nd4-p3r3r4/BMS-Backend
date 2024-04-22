@@ -35,7 +35,6 @@ public function purchaseStore(Request $request)
     ], [
         'qty.numeric' => 'Quantity must be a number',
         'unit_price.numeric' => 'Unit price must be a number',
-        
     ]);
 
     if ($validator->fails()) {
@@ -59,11 +58,9 @@ public function purchaseStore(Request $request)
     ]);
 
     if ($purchase) {
-
-
+        // Update the available_qty in the Materials table
         $materialsController = new MaterialsController();
-        $materialsController->updateInitialQuantity($request->material_id, $request->qty);
-
+        $materialsController->updateAvailableQuantity($request->material_id, $request->qty);
 
         return response()->json([
             'status' => 200,
@@ -77,6 +74,7 @@ public function purchaseStore(Request $request)
         ], 500);
     }
 }
+
 public function purchaseShow($purchase_id){
     $purchase = Purchase::find($purchase_id);
     if ( $purchase) {
@@ -118,7 +116,6 @@ public function purchaseupdate(Request $request, int $purchase_id) {
     ], [
         'qty.numeric' => 'Quantity must be a number',
         'unit_price.numeric' => 'Unit price must be a number',
-        
     ]);
 
     if ($validator->fails()) {
@@ -146,9 +143,9 @@ public function purchaseupdate(Request $request, int $purchase_id) {
             // Calculate the difference between the original and updated quantities
             $qty_difference = $request->qty - $original_qty;
 
-            // Update the initial quantity in the Materials table
+            // Update the available_qty in the Materials table
             $materialsController = new MaterialsController();
-            $materialsController->updateInitialQuantity($request->material_id, $qty_difference);
+            $materialsController->updateAvailableQuantity($request->material_id, $qty_difference);
 
             return response()->json([
                 'status' => 200,
@@ -163,6 +160,7 @@ public function purchaseupdate(Request $request, int $purchase_id) {
         }
     }
 }
+
 
 public function purchasedestroy($purchase_id){
 

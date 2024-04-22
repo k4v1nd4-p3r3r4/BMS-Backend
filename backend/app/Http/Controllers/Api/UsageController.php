@@ -27,64 +27,63 @@ class UsageController extends Controller
         }
     }
     public function usageStore(Request $request)
-    {
-        // Validate the request data
-        $validator = Validator::make($request->all(), [
-            'material_id' => 'required',
-            'date' => 'required',
-            'usage_qty' => 'required|numeric',
-        ], [
-            'usage_qty.numeric' => 'Usage quantity must be a number',
-        ]);
+{
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'material_id' => 'required',
+        'date' => 'required',
+        'usage_qty' => 'required|numeric',
+    ], [
+        'usage_qty.numeric' => 'Usage quantity must be a number',
+    ]);
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 422,
-                'message' => $validator->messages(),
-            ], 422);
-        }
-
-        // Retrieve material information
-        $material = Materials::where('material_id', $request->material_id)->first();
-
-        // Check if material exists
-        if (!$material) {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Material not found',
-            ], 404);
-        }
-
-        // Check if usage quantity exceeds initial quantity
-       // Check if usage quantity exceeds initial quantity
-if ($request->usage_qty > $material->initial_qty) {
-    $validator->errors()->add('usage_qty', 'Usage quantity exceeds available quantity. Check balance.');
-    return response()->json([
-        'status' => 422,
-        'message' => $validator->messages(),
-    ], 422);
-}
-
-
-        // Create a new instance of Usagematerials model
-        $usage = Usagematerials::create([
-            'material_id' => $request->material_id,
-            'date' => $request->date,
-            'usage_qty' => $request->usage_qty,
-        ]);
-
-        // Update initial quantity of the material
-        $material->initial_qty -= $request->usage_qty;
-        $material->save();
-
+    // Check if validation fails
+    if ($validator->fails()) {
         return response()->json([
-            'status' => 200,
-            'message' => 'Usage quantity added successfully',
-            'usage' => $usage,
-        ], 200);
+            'status' => 422,
+            'message' => $validator->messages(),
+        ], 422);
     }
 
+    // Retrieve material information
+    $material = Materials::where('material_id', $request->material_id)->first();
+
+    // Check if material exists
+    if (!$material) {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Material not found',
+        ], 404);
+    }
+
+    // Check if usage quantity exceeds available quantity
+    if ($request->usage_qty > $material->available_qty) {
+        $validator->errors()->add('usage_qty', 'Usage quantity exceeds available quantity. Check balance.');
+        return response()->json([
+            'status' => 422,
+            'message' => $validator->messages(),
+        ], 422);
+    }
+
+    // Create a new instance of Usagematerials model
+    $usage = Usagematerials::create([
+        'material_id' => $request->material_id,
+        'date' => $request->date,
+        'usage_qty' => $request->usage_qty,
+    ]);
+
+    // Update available quantity of the material
+    $material->available_qty -= $request->usage_qty;
+    $material->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Usage quantity added successfully',
+        'usage' => $usage,
+    ], 200);
+}
+
+    
     public function usageShow($usage_id){
         $usage = Usagematerials::find($usage_id);
         if ($usage) {
@@ -145,9 +144,9 @@ if ($request->usage_qty > $material->initial_qty) {
                 // Calculate the difference between the original and updated quantities
                 $qty_difference = $request->usage_qty - $original_qty;
     
-                // Update the initial quantity in the Materials table
+                // Update the available_qty in the Materials table
                 $materialsController = new MaterialsController();
-                $materialsController->updateInitialQuantity($request->material_id, -$qty_difference);
+                $materialsController->updateAvailableQuantity($request->material_id, -$qty_difference);
     
                 return response()->json([
                     'status' => 200,
@@ -162,6 +161,7 @@ if ($request->usage_qty > $material->initial_qty) {
             }
         }
     }
+    
     
     
         public function usagedestroy($usage_id){
