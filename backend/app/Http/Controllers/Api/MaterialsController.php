@@ -69,15 +69,15 @@ class MaterialsController extends Controller
     }
 }
 
-    
 
 
-    
-    
+
+
+
 
 public function show($material_id){
     $material = Materials::where('material_id', $material_id)->first();
-    
+
     if ($material){
         return response()->json([
             'status' => 200,
@@ -94,7 +94,7 @@ public function show($material_id){
 
 public function edit($material_id){
     $material = Materials::where('material_id', $material_id)->first();
-    
+
     if ($material){
         return response()->json([
             'status' => 200,
@@ -108,7 +108,7 @@ public function edit($material_id){
         ], 404);
 }
 
-        
+
     }
 
     public function update(Request $request, $material_id){
@@ -123,17 +123,17 @@ public function edit($material_id){
             'material_name.regex' => 'Material name must contain at least one letter',
             'initial_qty.numeric' => 'Initial quantity must be a number'
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
                 'message' => $validator->messages()
             ], 422);
         } else {
-            
+
             $material = Materials::where('material_id', $material_id)->first();
-         
-    
+
+
             if ($material) {
                 $material ->update([
                     'material_id'=> $request->material_id,
@@ -156,7 +156,7 @@ public function edit($material_id){
     }
 
     public function destroy($material_id){
-    
+
         $material = Materials::where('material_id', $material_id)->first();
 
         if($material){
@@ -165,7 +165,7 @@ public function edit($material_id){
             return response()->json([
                 'status' => 200,
                 'message' => 'Material deleted successfully',
-                
+
             ], 200);
         }
         else{
