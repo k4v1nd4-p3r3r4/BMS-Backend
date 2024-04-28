@@ -28,12 +28,13 @@ class MaterialsController extends Controller
     public function store(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'material_id' => ['required', 'regex:/^M\d{3}$/'],
+        'material_id' => ['required', 'regex:/^M\d{3}$/', 'unique:materials,material_id'],
         'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
         'initial_qty' => 'required|numeric',
         'unit' => 'required'
     ], [
         'material_id.regex' => 'Material ID should start with M followed by three digits (e.g., M001)',
+        'material_id.unique' => 'Material ID already exists',
         'material_name.regex' => 'Material name must contain at least one letter',
         'initial_qty.numeric' => 'Initial quantity must be a number'
     ]);
@@ -43,32 +44,36 @@ class MaterialsController extends Controller
             'status' => 422,
             'message' => $validator->messages()
         ], 422);
-    } else {
-        // Create a new instance of Materials model
-       $material =Materials::create([
+    }
+
+    // Calculate available_qty by adding initial_qty and the quantity being added
+    $available_qty = $request->initial_qty;
+
+    // Create a new instance of Materials model
+    $material = Materials::create([
         'material_id'=> $request->material_id,
         'material_name'=> $request->material_name,
         'initial_qty'=> $request->initial_qty,
+        'available_qty'=> $available_qty, // Assign the calculated available_qty
         'unit'=> $request->unit
-       ]);
+    ]);
 
-        if ($material) {
-
-            $this->updateInitialQuantity($request->material_id, $request->initial_qty);
-            return response()->json([
-                'status' => 200,
-                'message' => 'Material added successfully',
-                'material' => $material
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Failed! Something went wrong!'
-            ], 500);
-        }
+    if ($material) {
+        return response()->json([
+            'status' => 200,
+            'message' => 'Material added successfully',
+            'material' => $material
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 500,
+            'message' => 'Failed! Something went wrong!'
+        ], 500);
     }
 }
 
+
+    
 
 
 
@@ -133,14 +138,21 @@ public function edit($material_id){
 
             $material = Materials::where('material_id', $material_id)->first();
 
-
             if ($material) {
-                $material ->update([
+                // Calculate the difference in initial_qty
+                $initial_qty_difference = $request->initial_qty - $material->initial_qty;
+                
+                // Update the material
+                $material->update([
                     'material_id'=> $request->material_id,
                     'material_name'=> $request->material_name,
                     'initial_qty'=> $request->initial_qty,
                     'unit'=> $request->unit
-                   ]);
+                ]);
+                
+                // Update available_qty
+                $this->updateAvailableQuantity($material_id, $initial_qty_difference);
+    
                 return response()->json([
                     'status' => 200,
                     'message' => 'Material updated successfully',
@@ -149,11 +161,12 @@ public function edit($material_id){
             } else {
                 return response()->json([
                     'status' => 404,
-                    'message' => 'Failed! Something went wrong!'
+                    'message' => 'Failed! Material not found!'
                 ], 404);
             }
         }
     }
+    
 
     public function destroy($material_id){
 
@@ -176,25 +189,25 @@ public function edit($material_id){
         }
     }
 
-    public function updateInitialQuantity($material_id, $quantityChange)
-    {
-        $material = Materials::where('material_id', $material_id)->first();
+    public function updateAvailableQuantity($material_id, $quantityChange)
+{
+    $material = Materials::where('material_id', $material_id)->first();
 
-        if ($material) {
-            $material->initial_qty += $quantityChange;
-            $material->save();
+    if ($material) {
+        // Update the available_qty by adding the quantity change
+        $material->available_qty += $quantityChange;
+        $material->save();
 
-            return response()->json([
-                'status' => 200,
-                'message' => 'Initial quantity updated successfully',
-                'material' => $material
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'Material not found'
-            ], 404);
-        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Available quantity updated successfully',
+            'material' => $material
+        ], 200);
+    } else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Material not found'
+        ], 404);
     }
-
+}
 }
