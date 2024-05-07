@@ -8,22 +8,23 @@ use Illuminate\Support\Facades\Validator;
 
 class PurchaseMaterialController extends Controller
 {
-    public function purchase(){
-        
-    $purchase = Purchase::all();
-    if ($purchase->count() > 0) {
-        return response()->json([
-            'status' => 200,
-            'purchase' =>  $purchase
-        ], 200);
-    } else {
-        return response()->json([
-            'status' => 404,
-            'message' => 'No records found'
-        ], 404);
+    public function purchase()
+    {
+        $purchase = Purchase::orderBy('purchase_id', 'desc')->get();
+    
+        if ($purchase->count() > 0) {
+            return response()->json([
+                'status' => 200,
+                'purchase' =>  $purchase
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'No records found'
+            ], 404);
+        }
     }
-}
-
+    
 public function purchaseStore(Request $request)
 {
     $validator = Validator::make($request->all(), [
@@ -49,7 +50,7 @@ public function purchaseStore(Request $request)
 
     // Create a new instance of Purchase model
     $purchase = Purchase::create([
-        'material_id' => $request->material_id, // Ensure correct assignment here
+        'material_id' => $request->material_id, 
         'supplier_id' => $request->supplier_id,
         'date' => $request->date,
         'qty' => $request->qty,

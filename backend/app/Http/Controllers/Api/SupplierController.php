@@ -26,12 +26,13 @@ class SupplierController extends Controller
     public function supplierStore(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'supplier_id' => ['required', 'regex:/^S\d{3}$/'],
+            'supplier_id' => ['required', 'regex:/^S\d{3}$/','unique:supplier,supplier_id'],
             'supplier_name' => 'required|regex:/[a-zA-Z]/|max:100',
             'contact_number' => 'required|digits:10|numeric',
             'address' => 'required||regex:/[a-zA-Z]/|max:100',
         ], [
             'supplier_id.regex' => 'Supplier ID should start with S followed by three digits (e.g., S001)',
+            'supplier_id.unique' => 'Supplier ID already exists',
             'supplier_name.regex' => 'Supplier name must contain at least one letter',
             'contact_number.numeric' => 'Contact number must be a numeric',
             'address.regex' => 'Address must contain at least one letter'

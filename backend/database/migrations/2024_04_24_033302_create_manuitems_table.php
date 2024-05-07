@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materials', function (Blueprint $table) {
-            $table->string('material_id')->primary(); 
-            $table->string('material_name');
-            $table->string('category');
-            $table->double('initial_qty');
-            $table->string('unit');
-            $table->double('available_qty');
+        Schema::create('manuitems', function (Blueprint $table) {
+            $table->id('manu_id');
+            $table->string('item_id');
+            $table->foreign('item_id')
+            ->references('item_id')
+            ->on('handlist')
+            ->onDelete('cascade');
 
+            $table->double('qty');
+            $table->date('date');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('materials');
+        Schema::dropIfExists('manuitems');
     }
 };
