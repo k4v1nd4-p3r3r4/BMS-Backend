@@ -115,6 +115,9 @@ Route::put('handsales/{handsale_id}/handsaleedit',[ItemsaleController::class,'ha
 Route::delete('handsales/{handsale_id}/handsaledelete',[ItemsaleController::class,'handsaledestroy']);
 
 
+
+
+
 //This Route for dashboard cards
 Route::get('dashboard/foodsale',[DashboardController::class,'TotalFoodsale']);
 Route::get('dashboard/itemsale',[DashboardController::class,'TotalItemsale']);
