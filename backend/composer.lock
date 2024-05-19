@@ -40,8 +40,7 @@
                     "email": "barryvdh@gmail.com"
                 }
             ],
-            "description": "A DOMPDF Wrapper for Laravel",
-            "keywords": ["dompdf", "laravel", "pdf"],
+
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
                 "source": "https://github.com/barryvdh/laravel-dompdf/tree/v2.1.1"
@@ -136,6 +135,7 @@
                 "nesbot/carbon": "^2.71.0 || ^3.0.0",
                 "phpunit/phpunit": "^10.3"
             },
+            "type": "library",
 
             "notification-url": "https://packagist.org/downloads/",
             "license": ["MIT"],
@@ -250,7 +250,12 @@
                 "phpunit/phpunit": "^8.5 || ^9.5",
                 "vimeo/psalm": "^4.25 || ^5.4"
             },
-
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": ["MIT"],
             "authors": [
