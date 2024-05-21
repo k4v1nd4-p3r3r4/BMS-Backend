@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\PdfController;
 use App\Http\Controllers\Api\CardsController;
 use App\Http\Controllers\Api\ChartController;
 use App\Http\Controllers\Api\UsageController;
