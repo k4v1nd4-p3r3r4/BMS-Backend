@@ -56,7 +56,6 @@ Route::get('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'su
 Route::put('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplierupdate']);
 Route::delete('suppliers/{supplier_id}/supplierdelete',[SupplierController::class,'supplierdestroy']);
 
-/*
 //This Routes for the Customers Controller
 Route::get('customers',[CustomerController::class,'customer']);
 Route::post('customers',[CustomerController::class, 'customerStore']);
@@ -133,4 +132,3 @@ Route::get('materialcharts/getMaterialQty', [ChartController::class, 'getAvailab
 //this Route for notify low quantity
 Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityMaterials']);
 Route::delete('notify/notifications/{material_id}', [NotifiController::class, 'deleteNotification']);
-*/
