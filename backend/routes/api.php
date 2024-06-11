@@ -6,11 +6,10 @@ use App\Http\Controllers\Api\UsageController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\MaterialsController;
 use App\Http\Controllers\Api\PurchaseMaterialController;
+
+use App\Http\Controllers\expenceController;
 use App\Http\Controllers\EmployeeController;
-
-
 use App\Http\Controllers\UserController;
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -55,3 +54,8 @@ Route::get('suppliers/{supplier_id}',[SupplierController::class,'supplierShow'])
 Route::get('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplieredit']);
 Route::put('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplierupdate']);
 Route::delete('suppliers/{supplier_id}/supplierdelete',[SupplierController::class,'supplierdestroy']);
+
+
+//This Routes for the expences
+Route::apiResource('/expence', expenceController::class);
+
