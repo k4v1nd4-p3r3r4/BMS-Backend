@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('material_name');
             $table->double('initial_qty');
             $table->string('unit');
+            $table->double('available_qty');
 
             $table->timestamps();
         });

@@ -35,7 +35,6 @@ public function purchaseStore(Request $request)
     ], [
         'qty.numeric' => 'Quantity must be a number',
         'unit_price.numeric' => 'Unit price must be a number',
-        
     ]);
 
     if ($validator->fails()) {
@@ -59,11 +58,9 @@ public function purchaseStore(Request $request)
     ]);
 
     if ($purchase) {
-
-
+        // Update the available_qty in the Materials table
         $materialsController = new MaterialsController();
-        $materialsController->updateInitialQuantity($request->material_id, $request->qty);
-
+        $materialsController->updateAvailableQuantity($request->material_id, $request->qty);
 
         return response()->json([
             'status' => 200,
@@ -77,6 +74,7 @@ public function purchaseStore(Request $request)
         ], 500);
     }
 }
+
 public function purchaseShow($purchase_id){
     $purchase = Purchase::find($purchase_id);
     if ( $purchase) {
@@ -109,8 +107,6 @@ public function purchaseedit($purchase_id){
 }
 
 public function purchaseupdate(Request $request, int $purchase_id) {
-        
-
     $validator = Validator::make($request->all(), [
         'material_id' => 'required',
         'supplier_id' => 'required',
@@ -120,7 +116,6 @@ public function purchaseupdate(Request $request, int $purchase_id) {
     ], [
         'qty.numeric' => 'Quantity must be a number',
         'unit_price.numeric' => 'Unit price must be a number',
-        
     ]);
 
     if ($validator->fails()) {
@@ -129,26 +124,33 @@ public function purchaseupdate(Request $request, int $purchase_id) {
             'message' => $validator->messages()
         ], 422);
     } else {
-       
-        $purchase =Purchase::find($purchase_id);
-      
+        $purchase = Purchase::find($purchase_id);
 
         if ($purchase) {
+            $original_qty = $purchase->qty; // Get the original purchase quantity
+
+            // Update the purchase details
             $total_amount = $request->qty * $request->unit_price;
             $purchase->update([
+                'material_id' => $request->material_id,
+                'supplier_id' => $request->supplier_id,
+                'date' => $request->date,
+                'qty' => $request->qty,
+                'unit_price' => $request->unit_price,
+                'total_amount' => $total_amount,
+            ]);
 
-        'material_id' => $request->material_id, // Ensure correct assignment here
-        'supplier_id' => $request->supplier_id,
-        'date' => $request->date,
-        'qty' => $request->qty,
-        'unit_price' => $request->unit_price,
-        'total_amount' => $total_amount,
-               
-               ]);
+            // Calculate the difference between the original and updated quantities
+            $qty_difference = $request->qty - $original_qty;
+
+            // Update the available_qty in the Materials table
+            $materialsController = new MaterialsController();
+            $materialsController->updateAvailableQuantity($request->material_id, $qty_difference);
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Purchase details updated successfully',
-                'purchase' =>  $purchase
+                'purchase' => $purchase
             ], 200);
         } else {
             return response()->json([
@@ -156,10 +158,10 @@ public function purchaseupdate(Request $request, int $purchase_id) {
                 'message' => 'Failed! Something went wrong!'
             ], 404);
         }
-
-        
     }
 }
+
+
 public function purchasedestroy($purchase_id){
 
     $purchase = Purchase::find($purchase_id);

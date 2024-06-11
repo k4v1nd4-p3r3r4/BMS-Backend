@@ -17,6 +17,7 @@ class Materials extends Model
         'material_name',
         'initial_qty',
          'unit',
+         'available_qty'
          
     ];
     protected $keyType = 'string'; //it use to difine primary key as a string
