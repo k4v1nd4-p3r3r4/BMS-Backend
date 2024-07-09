@@ -143,12 +143,12 @@ Route::get('materialcharts/getAvailableQtyByMaterialName', [ChartController::cla
 Route::get('manucharts/getTotalFoodSellingQtyByFoodName', [ChartController::class, 'getTotalFoodSellingQtyByFoodName']);
 Route::get('manucharts/getTotalItemSellingQtyByItemName', [ChartController::class, 'getTotalItemSellingQtyByItemName']);
 
-<<<<<<< HEAD
+
 Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityNotifications']);
 Route::delete('notify/notifications/{id}/{type}', [NotifiController::class, 'deleteNotification']);
 Route::get('sales/getTotalFoodSellingQtyByFoodId', [ChartController::class, 'getTotalFoodSellingQtyByFoodId']);
 Route::get('sales/getTotalItemSellingQtyByItemId', [ChartController::class, 'getTotalItemSellingQtyByItemId']);
-=======
+
 //this Route for notify low quantity
 Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityMaterials']);
 Route::delete('notify/notifications/{material_id}', [NotifiController::class, 'deleteNotification']);
@@ -156,4 +156,4 @@ Route::delete('notify/notifications/{material_id}', [NotifiController::class, 'd
 //This Routes for the expences
 Route::apiResource('/expence', expenceController::class);
 
->>>>>>> 54caad19e97d617af625ed1f7f16f0bf98b18fa1
+

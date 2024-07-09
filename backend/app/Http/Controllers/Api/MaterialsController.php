@@ -75,18 +75,7 @@ class MaterialsController extends Controller
     }
 }
 
-<<<<<<< HEAD
-//Retrieved Material specified by id
-=======
 
-    
-
-
-
-
-
-
->>>>>>> 54caad19e97d617af625ed1f7f16f0bf98b18fa1
 public function show($material_id){
     $material = Materials::where('material_id', $material_id)->first();
 
