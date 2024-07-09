@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ManuitemController extends Controller
 {
-   
+ //Function for get all manu - handcraftitem   
     public function manuitemslist(){
         $manuitems = Manuitems::orderBy('manu_id', 'desc')->get();
         if ($manuitems->count() > 0) {
@@ -25,10 +25,10 @@ class ManuitemController extends Controller
         }
     }
     
-
+//Function for store hand-items in database
     public function manuitemStore(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [ //validate the fields
             'item_id' => 'required',
             'qty' => 'required|numeric',
             'date' => 'required',
@@ -69,7 +69,7 @@ class ManuitemController extends Controller
             }
         }
     }
-
+//retrived manu-items according to id
     public function manuitemShow($manuitem_id){
         $manuitems = Manuitems::where('manu_id', $manuitem_id)->first();
         if ($manuitems){
@@ -86,6 +86,7 @@ class ManuitemController extends Controller
         }
     }
 
+//Function for edit items specified id
     public function mannuitemEdit($manuitem_id){
         $manuitems = Manuitems::where('manu_id', $manuitem_id)->first();
         if ($manuitems){
@@ -102,9 +103,10 @@ class ManuitemController extends Controller
         }
     }
 
+ //Function for update manu item details   
     public function manuitemupdate(Request $request, $manuitem_id)
 {
-    $validator = Validator::make($request->all(), [
+    $validator = Validator::make($request->all(), [ //validate fields before update
         'item_id' => 'required',
         'qty' => 'required|numeric',
         'date' => 'required',
@@ -153,6 +155,7 @@ class ManuitemController extends Controller
     }
 }
 
+//Function for deleting a handlist
     public function manuitemdestroy($manuitem_id){
         $manuitems = Manuitems::where('manu_id', $manuitem_id)->first();
         if(  $manuitems){

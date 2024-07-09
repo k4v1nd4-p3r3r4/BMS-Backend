@@ -16,6 +16,7 @@ class Foodlist extends Model
        'food_id',
         'food_name',
         'unit',
+     
         'qty'
          
          

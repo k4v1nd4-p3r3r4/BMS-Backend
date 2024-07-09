@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MaterialsController extends Controller
 {
-    public function index()
+    public function index() //Retrived the all materials details
     {
         $materials = Materials::all();
         if ($materials->count() > 0) {
@@ -25,9 +25,10 @@ class MaterialsController extends Controller
         }
     }
 
+//store materials details    
     public function store(Request $request)
 {
-    $validator = Validator::make($request->all(), [
+    $validator = Validator::make($request->all(), [ //validate bedore store data
         'material_id' => ['required', 'regex:/^M\d{3}$/', 'unique:materials,material_id'],
         'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
         'category' => 'required',
@@ -74,17 +75,21 @@ class MaterialsController extends Controller
     }
 }
 
-    
+<<<<<<< HEAD
+//Retrieved Material specified by id
+=======
 
     
 
 
-    
-    
 
+
+
+
+>>>>>>> 54caad19e97d617af625ed1f7f16f0bf98b18fa1
 public function show($material_id){
     $material = Materials::where('material_id', $material_id)->first();
-    
+
     if ($material){
         return response()->json([
             'status' => 200,
@@ -99,9 +104,10 @@ public function show($material_id){
     }
 }
 
+//Function for edit details according to id
 public function edit($material_id){
     $material = Materials::where('material_id', $material_id)->first();
-    
+
     if ($material){
         return response()->json([
             'status' => 200,
@@ -115,10 +121,11 @@ public function edit($material_id){
         ], 404);
 }
 
-        
+
     }
 
-    public function update(Request $request, $material_id){
+ //Function for update details according to id
+ public function update(Request $request, $material_id){
 
         $validator = Validator::make($request->all(), [
             'material_id' => ['required', 'regex:/^M\d{3}$/'],
@@ -131,16 +138,16 @@ public function edit($material_id){
             'material_name.regex' => 'Material name must contain at least one letter',
             'initial_qty.numeric' => 'Initial quantity must be a number'
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
                 'message' => $validator->messages()
             ], 422);
         } else {
-            
+
             $material = Materials::where('material_id', $material_id)->first();
-    
+
             if ($material) {
                 // Calculate the difference in initial_qty
                 $initial_qty_difference = $request->initial_qty - $material->initial_qty;
@@ -171,9 +178,9 @@ public function edit($material_id){
         }
     }
     
-
+//Function for deleting a material according id
     public function destroy($material_id){
-    
+
         $material = Materials::where('material_id', $material_id)->first();
 
         if($material){
@@ -182,7 +189,7 @@ public function edit($material_id){
             return response()->json([
                 'status' => 200,
                 'message' => 'Material deleted successfully',
-                
+
             ], 200);
         }
         else{
@@ -193,6 +200,7 @@ public function edit($material_id){
         }
     }
 
+//Function for update the available qty    
     public function updateAvailableQuantity($material_id, $quantityChange)
 {
     $material = Materials::where('material_id', $material_id)->first();

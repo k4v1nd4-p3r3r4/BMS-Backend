@@ -18,11 +18,21 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MaterialsController;
 use App\Http\Controllers\Api\PurchaseMaterialController;
 
-
-
+use App\Http\Controllers\expenceController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//login and registration
+Route::Post('register',[UserController::class,'register']);
+Route::Post('login',[UserController::class,'login']);
+
+
+//employee managemant route
+Route::apiResource('/employee',EmployeeController::class);
+
 
 //This Routes for the Material
 Route::get('materials',[MaterialsController::class,'index']);
@@ -55,6 +65,7 @@ Route::get('suppliers/{supplier_id}',[SupplierController::class,'supplierShow'])
 Route::get('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplieredit']);
 Route::put('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplierupdate']);
 Route::delete('suppliers/{supplier_id}/supplierdelete',[SupplierController::class,'supplierdestroy']);
+
 
 //This Routes for the Customers Controller
 Route::get('customers',[CustomerController::class,'customer']);
@@ -122,13 +133,27 @@ Route::get('dashboard/foodsale',[DashboardController::class,'TotalFoodsale']);
 Route::get('dashboard/itemsale',[DashboardController::class,'TotalItemsale']);
 Route::get('dashboard/totalsale',[DashboardController::class,'saleTotalAmount']);
 Route::get('dashboard/totalpurchase',[DashboardController::class,'purchaseTotalAmount']);
-
+Route::get('dashboard/totalcustomers', [DashboardController::class, 'TotalCustomers']);
 //This Route for dashboard charts
 
-Route::get('manucharts/getTotalFoodQtyByDate', [ChartController::class, 'getTotalFoodQtyByDate']);
-Route::get('manucharts/getTotalItemQtyByDate', [ChartController::class, 'getTotalItemQtyByDate']);
-Route::get('materialcharts/getMaterialQty', [ChartController::class, 'getAvailableQuantities']);
+Route::get('manucharts/getAvailableQtyByFoodName', [ChartController::class, 'getAvailableQtyByFoodName']);
+Route::get('manucharts/getAvailableQtyByItemName', [ChartController::class, 'getAvailableQtyByItemName']);
+Route::get('materialcharts/getUsageQtyByMaterialName', [ChartController::class, 'getUsageQtyByMaterialName']);
+Route::get('materialcharts/getAvailableQtyByMaterialName', [ChartController::class, 'getAvailableQtyByMaterialName']);
+Route::get('manucharts/getTotalFoodSellingQtyByFoodName', [ChartController::class, 'getTotalFoodSellingQtyByFoodName']);
+Route::get('manucharts/getTotalItemSellingQtyByItemName', [ChartController::class, 'getTotalItemSellingQtyByItemName']);
 
+<<<<<<< HEAD
+Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityNotifications']);
+Route::delete('notify/notifications/{id}/{type}', [NotifiController::class, 'deleteNotification']);
+Route::get('sales/getTotalFoodSellingQtyByFoodId', [ChartController::class, 'getTotalFoodSellingQtyByFoodId']);
+Route::get('sales/getTotalItemSellingQtyByItemId', [ChartController::class, 'getTotalItemSellingQtyByItemId']);
+=======
 //this Route for notify low quantity
 Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityMaterials']);
 Route::delete('notify/notifications/{material_id}', [NotifiController::class, 'deleteNotification']);
+
+//This Routes for the expences
+Route::apiResource('/expence', expenceController::class);
+
+>>>>>>> 54caad19e97d617af625ed1f7f16f0bf98b18fa1
