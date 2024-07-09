@@ -18,11 +18,21 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MaterialsController;
 use App\Http\Controllers\Api\PurchaseMaterialController;
 
-
-
+use App\Http\Controllers\expenceController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//login and registration
+Route::Post('register',[UserController::class,'register']);
+Route::Post('login',[UserController::class,'login']);
+
+
+//employee managemant route
+Route::apiResource('/employee',EmployeeController::class);
+
 
 //This Routes for the Material
 Route::get('materials',[MaterialsController::class,'index']);
@@ -55,6 +65,7 @@ Route::get('suppliers/{supplier_id}',[SupplierController::class,'supplierShow'])
 Route::get('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplieredit']);
 Route::put('suppliers/{supplier_id}/supplieredit',[SupplierController::class,'supplierupdate']);
 Route::delete('suppliers/{supplier_id}/supplierdelete',[SupplierController::class,'supplierdestroy']);
+
 
 //This Routes for the Customers Controller
 Route::get('customers',[CustomerController::class,'customer']);
@@ -132,3 +143,7 @@ Route::get('materialcharts/getMaterialQty', [ChartController::class, 'getAvailab
 //this Route for notify low quantity
 Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityMaterials']);
 Route::delete('notify/notifications/{material_id}', [NotifiController::class, 'deleteNotification']);
+
+//This Routes for the expences
+Route::apiResource('/expence', expenceController::class);
+
