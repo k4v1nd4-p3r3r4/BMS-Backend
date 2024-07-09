@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SupplierController extends Controller
 {
-    public function supplier(){
+    public function supplier(){ //  Retrieve all supplier records from the Supplier model
         
         $supplier = Supplier::all();
         if ($supplier->count() > 0) {
@@ -23,10 +23,12 @@ class SupplierController extends Controller
             ], 404);
         }
     }
+
+//Function for store supplier
     public function supplierStore(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'supplier_id' => ['required', 'regex:/^S\d{3}$/','unique:supplier,supplier_id'],
+            'supplier_id' => ['required', 'regex:/^S\d{3}$/','unique:supplier,supplier_id'],// Validate the incoming request data
             'supplier_name' => 'required|regex:/[a-zA-Z]/|max:100',
             'contact_number' => 'required|digits:10|numeric',
             'address' => 'required||regex:/[a-zA-Z]/|max:100',
@@ -67,7 +69,7 @@ class SupplierController extends Controller
 }
 
 
-
+//  Retrieve the first supplier record that matches the given supplier_id
 public function supplierShow($supplier_id){
     $supplier = Supplier::where('supplier_id', $supplier_id)->first();
     
@@ -85,7 +87,7 @@ public function supplierShow($supplier_id){
     }
 }
 
-
+//Function for edit supplier details
 public function supplieredit($supplier_id){
     $supplier = Supplier::where('supplier_id', $supplier_id)->first();
     
@@ -102,11 +104,12 @@ public function supplieredit($supplier_id){
         ], 404);
 }
 
-        
     }
+
+ //function for update supplier   
     public function supplierupdate(Request $request, $supplier_id){
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [ //validate before updating  
             'supplier_id' => ['required', 'regex:/^S\d{3}$/'],
             'supplier_name' => 'required|regex:/[a-zA-Z]/|max:100',
             'contact_number' => 'required|digits:10|numeric',
@@ -148,7 +151,7 @@ public function supplieredit($supplier_id){
             }
         }
     }
-
+//delte supplier details
     public function supplierdestroy($supplier_id){
     
         $supplier = Supplier::where('supplier_id', $supplier_id)->first();

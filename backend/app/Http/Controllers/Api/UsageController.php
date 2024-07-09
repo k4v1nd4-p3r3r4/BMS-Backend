@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UsageController extends Controller
 {
-   
+ // Retrieve all usage materials records from the Usagematerials  
     public function usageMaterials(){
         $usage = Usagematerials::orderBy('usage_id', 'desc')->get();
         if ($usage->count() > 0) {
@@ -82,7 +82,7 @@ class UsageController extends Controller
     ], 200);
 }
 
-    
+  //// Find the usage materials record by the given usage_id  
     public function usageShow($usage_id){
         $usage = Usagematerials::find($usage_id);
         if ($usage) {
@@ -98,6 +98,7 @@ class UsageController extends Controller
         }
     }
 
+ // Find the usage materials record by the given usage_id    
     public function usageedit($usage_id){
 
         $usage = Usagematerials::find($usage_id);
@@ -113,6 +114,8 @@ class UsageController extends Controller
             ], 404);
         }
     }
+
+ //update the usage materials record by the given usage
     public function usageupdate(Request $request, int $usage_id) {
         $validator = Validator::make($request->all(), [
             'material_id' => 'required',
@@ -162,7 +165,7 @@ class UsageController extends Controller
     }
     
     
-    
+//function for delete usage delete
         public function usagedestroy($usage_id){
 
             $usage = Usagematerials::find($usage_id);

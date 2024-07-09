@@ -10,7 +10,7 @@ class PurchaseMaterialController extends Controller
 {
     public function purchase()
     {
-        $purchase = Purchase::orderBy('purchase_id', 'desc')->get();
+        $purchase = Purchase::orderBy('purchase_id', 'desc')->get(); // Retrieve all purchase records from the Purchase model, ordered by purchase_id in descending order
     
         if ($purchase->count() > 0) {
             return response()->json([
@@ -24,7 +24,7 @@ class PurchaseMaterialController extends Controller
             ], 404);
         }
     }
-    
+//function for store purchase details    
 public function purchaseStore(Request $request)
 {
     $validator = Validator::make($request->all(), [
@@ -75,7 +75,7 @@ public function purchaseStore(Request $request)
         ], 500);
     }
 }
-
+// Find the purchase record by the given purchase_id
 public function purchaseShow($purchase_id){
     $purchase = Purchase::find($purchase_id);
     if ( $purchase) {
@@ -90,7 +90,7 @@ public function purchaseShow($purchase_id){
         ], 404);
     }
 }
-
+//edite details according to id
 public function purchaseedit($purchase_id){
 
     $purchase = Purchase::find($purchase_id);
@@ -107,6 +107,7 @@ public function purchaseedit($purchase_id){
     }
 }
 
+//function for updates
 public function purchaseupdate(Request $request, int $purchase_id) {
     $validator = Validator::make($request->all(), [
         'material_id' => 'required',
@@ -162,7 +163,7 @@ public function purchaseupdate(Request $request, int $purchase_id) {
     }
 }
 
-
+//Function for deleted
 public function purchasedestroy($purchase_id){
 
     $purchase = Purchase::find($purchase_id);

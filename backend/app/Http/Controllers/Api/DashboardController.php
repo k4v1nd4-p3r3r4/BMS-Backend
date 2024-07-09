@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Customer;
 use App\Models\FoodSale;
 use App\Models\ItemSale;
 use App\Models\Purchase;
@@ -10,7 +11,8 @@ use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
-  
+
+//Function for get total count of foodsales
     public function TotalFoodsale()
     {
         $totalFoodSales = FoodSale::count();
@@ -28,6 +30,7 @@ class DashboardController extends Controller
         }
     }
 
+//Function for get total item sales count   
     public function TotalItemsale()
     {
         $TotalItemsale = ItemSale::count();
@@ -45,6 +48,7 @@ class DashboardController extends Controller
         }
     }
 
+//Function for get sum of both food sales and item sales   
     public function saleTotalAmount()
     {
         {
@@ -76,5 +80,14 @@ class DashboardController extends Controller
         }
     
     
+    }
+    public function TotalCustomers()
+    {
+        $totalCustomers = Customer::count();
+
+        return response()->json([
+            'status' => 200,
+            'total_customers' => $totalCustomers
+        ], 200);
     }
 }

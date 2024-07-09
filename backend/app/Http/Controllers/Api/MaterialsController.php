@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MaterialsController extends Controller
 {
-    public function index()
+    public function index() //Retrived the all materials details
     {
         $materials = Materials::all();
         if ($materials->count() > 0) {
@@ -25,9 +25,10 @@ class MaterialsController extends Controller
         }
     }
 
+//store materials details    
     public function store(Request $request)
 {
-    $validator = Validator::make($request->all(), [
+    $validator = Validator::make($request->all(), [ //validate bedore store data
         'material_id' => ['required', 'regex:/^M\d{3}$/', 'unique:materials,material_id'],
         'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
         'category' => 'required',
@@ -75,13 +76,6 @@ class MaterialsController extends Controller
 }
 
 
-    
-
-
-
-
-
-
 public function show($material_id){
     $material = Materials::where('material_id', $material_id)->first();
 
@@ -99,6 +93,7 @@ public function show($material_id){
     }
 }
 
+//Function for edit details according to id
 public function edit($material_id){
     $material = Materials::where('material_id', $material_id)->first();
 
@@ -118,7 +113,8 @@ public function edit($material_id){
 
     }
 
-    public function update(Request $request, $material_id){
+ //Function for update details according to id
+ public function update(Request $request, $material_id){
 
         $validator = Validator::make($request->all(), [
             'material_id' => ['required', 'regex:/^M\d{3}$/'],
@@ -171,7 +167,7 @@ public function edit($material_id){
         }
     }
     
-
+//Function for deleting a material according id
     public function destroy($material_id){
 
         $material = Materials::where('material_id', $material_id)->first();
@@ -193,6 +189,7 @@ public function edit($material_id){
         }
     }
 
+//Function for update the available qty    
     public function updateAvailableQuantity($material_id, $quantityChange)
 {
     $material = Materials::where('material_id', $material_id)->first();

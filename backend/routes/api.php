@@ -133,12 +133,21 @@ Route::get('dashboard/foodsale',[DashboardController::class,'TotalFoodsale']);
 Route::get('dashboard/itemsale',[DashboardController::class,'TotalItemsale']);
 Route::get('dashboard/totalsale',[DashboardController::class,'saleTotalAmount']);
 Route::get('dashboard/totalpurchase',[DashboardController::class,'purchaseTotalAmount']);
-
+Route::get('dashboard/totalcustomers', [DashboardController::class, 'TotalCustomers']);
 //This Route for dashboard charts
 
-Route::get('manucharts/getTotalFoodQtyByDate', [ChartController::class, 'getTotalFoodQtyByDate']);
-Route::get('manucharts/getTotalItemQtyByDate', [ChartController::class, 'getTotalItemQtyByDate']);
-Route::get('materialcharts/getMaterialQty', [ChartController::class, 'getAvailableQuantities']);
+Route::get('manucharts/getAvailableQtyByFoodName', [ChartController::class, 'getAvailableQtyByFoodName']);
+Route::get('manucharts/getAvailableQtyByItemName', [ChartController::class, 'getAvailableQtyByItemName']);
+Route::get('materialcharts/getUsageQtyByMaterialName', [ChartController::class, 'getUsageQtyByMaterialName']);
+Route::get('materialcharts/getAvailableQtyByMaterialName', [ChartController::class, 'getAvailableQtyByMaterialName']);
+Route::get('manucharts/getTotalFoodSellingQtyByFoodName', [ChartController::class, 'getTotalFoodSellingQtyByFoodName']);
+Route::get('manucharts/getTotalItemSellingQtyByItemName', [ChartController::class, 'getTotalItemSellingQtyByItemName']);
+
+
+Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityNotifications']);
+Route::delete('notify/notifications/{id}/{type}', [NotifiController::class, 'deleteNotification']);
+Route::get('sales/getTotalFoodSellingQtyByFoodId', [ChartController::class, 'getTotalFoodSellingQtyByFoodId']);
+Route::get('sales/getTotalItemSellingQtyByItemId', [ChartController::class, 'getTotalItemSellingQtyByItemId']);
 
 //this Route for notify low quantity
 Route::get('notify/notifications', [NotifiController::class, 'checkLowQuantityMaterials']);
@@ -146,4 +155,5 @@ Route::delete('notify/notifications/{material_id}', [NotifiController::class, 'd
 
 //This Routes for the expences
 Route::apiResource('/expence', expenceController::class);
+
 
