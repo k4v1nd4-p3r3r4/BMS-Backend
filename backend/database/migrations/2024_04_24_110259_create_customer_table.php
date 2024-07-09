@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materials', function (Blueprint $table) {
-            $table->string('material_id')->primary(); 
-            $table->string('material_name');
-            $table->string('category');
-            $table->double('initial_qty');
-            $table->string('unit');
-            $table->double('available_qty');
-
+        Schema::create('customer', function (Blueprint $table) {
+            $table->string('customer_id')->primary(); 
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('contact');
+            $table->string('address');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('materials');
+        Schema::dropIfExists('customer');
     }
 };

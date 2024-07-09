@@ -30,6 +30,7 @@ class MaterialsController extends Controller
     $validator = Validator::make($request->all(), [
         'material_id' => ['required', 'regex:/^M\d{3}$/', 'unique:materials,material_id'],
         'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
+        'category' => 'required',
         'initial_qty' => 'required|numeric',
         'unit' => 'required'
     ], [
@@ -53,6 +54,7 @@ class MaterialsController extends Controller
     $material = Materials::create([
         'material_id'=> $request->material_id,
         'material_name'=> $request->material_name,
+        'category' => $request->category,
         'initial_qty'=> $request->initial_qty,
         'available_qty'=> $available_qty, // Assign the calculated available_qty
         'unit'=> $request->unit
@@ -121,6 +123,7 @@ public function edit($material_id){
         $validator = Validator::make($request->all(), [
             'material_id' => ['required', 'regex:/^M\d{3}$/'],
             'material_name' => 'required|regex:/[a-zA-Z]/|max:100',
+            'category' => 'required',
             'initial_qty' => 'required|numeric',
             'unit' => 'required'
         ], [
@@ -146,6 +149,7 @@ public function edit($material_id){
                 $material->update([
                     'material_id'=> $request->material_id,
                     'material_name'=> $request->material_name,
+                    'category'=>$request->category,
                     'initial_qty'=> $request->initial_qty,
                     'unit'=> $request->unit
                 ]);

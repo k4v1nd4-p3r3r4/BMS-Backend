@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Validator;
 class UsageController extends Controller
 {
    
-
     public function usageMaterials(){
-        
-        $usage = Usagematerials::all();
+        $usage = Usagematerials::orderBy('usage_id', 'desc')->get();
         if ($usage->count() > 0) {
             return response()->json([
                 'status' => 200,
@@ -26,6 +24,7 @@ class UsageController extends Controller
             ], 404);
         }
     }
+    
     public function usageStore(Request $request)
 {
     // Validate the request data
